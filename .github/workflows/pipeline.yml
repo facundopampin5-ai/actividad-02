@@ -1,0 +1,30 @@
+name: CI Testing Pipeline
+
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Instalar dependencias
+      run: |
+        pip install pytest pytest-html
+
+    - name: Ejecutar Tests
+      run: |
+        pytest --html=report.html --self-contained-html
+
+    - name: Subir Reporte como Artefacto
+      uses: actions/upload-artifact@v4
+      with:
+        name: reporte-de-pruebas
+        path: report.html
